@@ -7,4 +7,4 @@ Usage: php shodan.php [dork] [optional: save results to json] [optional: socks p
 Example 1: php shodan.php 'jboss 6657' --save=jboss_data.json
 Example 2: php shodan.php 'jboss 6657' --save=jboss_data.json --proxy=127.0.0.1:9050
 
-![alt tag](http://url/to/img.png)
+![alt tag](https://raw.githubusercontent.com/azams/shodanCuk/master/banner.jpg)
