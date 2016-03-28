@@ -1,13 +1,10 @@
 # shodanCuk
 Grabbing results from shodan using free account.
 
-
-     |             |          ,---.     |
-,---.|---.,---.,---|,---.,---.|    .   .|__/
-`---.|   ||   ||   |,---||   ||    |   ||  \
-`---'`   '`---'`---'`---^`   '`---'`---'`   `
-
 https://github.com/azams/shodanCuk
 
-Usage: php shodan.php [dork] [optional: save results to json]
-Example: php shodan.php 'jboss 6657' jboss_data.json
+Usage: php shodan.php [dork] [optional: save results to json] [optional: socks proxy]
+Example 1: php shodan.php 'jboss 6657' --save=jboss_data.json
+Example 2: php shodan.php 'jboss 6657' --save=jboss_data.json --proxy=127.0.0.1:9050
+
+![alt tag](http://url/to/img.png)
