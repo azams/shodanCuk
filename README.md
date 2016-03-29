@@ -1,5 +1,7 @@
 # shodanCuk
-Grabbing results from shodan using free account.
+Grabbing results from shodan using free account.<br>
+Export results to json file.
+
 
 https://github.com/azams/shodanCuk<br>
 
