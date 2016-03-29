@@ -34,8 +34,6 @@ if(isset($_SERVER['argv'][1]))
 		}
 	}
 	
-	if(isset($_SERVER['argv'][2])) $out = $_SERVER['argv'][2];
-	
 	$page = login();
 	if(!$page) 
 	{
