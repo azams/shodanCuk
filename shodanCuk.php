@@ -43,33 +43,47 @@ if(isset($_SERVER['argv'][1]))
 		while($scan) 
 		{
 			$page = buka("https://www.shodan.io/search?query=$dork&page=$p");
+			if(stristr($page, "No results found")) die("No results found.\n");
 			
-			preg_match_all('#<div class="ip"><a href="(http|https):\/\/(.*?):([0-9]+)">(.*?)<\/a>#', $page, $ips);
+			if(preg_match_all('#<div class="ip"><a href="(http:\/\/|https:\/\/|\/host\/)([0-9\.:]+)">(.*?)<\/a>#', $page, $ips)) $ips = $ips[2];
+			elseif(preg_match('#<div class="ip"><a href="(http:\/\/|https:\/\/|\/host\/)([0-9\.:]+)">#', $page, $ips)) $ips = $ips[2];
 			preg_match_all('#src="https:\/\/static\.shodan\.io\/shodan\/img\/flags\/(.*?)" title="(.*?)"\/>#', $page, $country);
 			preg_match_all('#<span>Added on (.*?)<\/span>#', $page, $added);
 			
 			$tot = count($country[0]);
-			
+			if($tot == 0) die("=============== Grabbing Complete =============\n");
 			for($o=0;$o<$tot;$o++) 
 			{
-				$ip = $ips[2][$o];
-				$port = $ips[3][$o];
-				$coun = $country[2][$o];
-				$add = $added[1][$o];
-				echo "[$i]\n        [IP] $ip\n        [PORT] $port\n        [COUNTRY] $coun\n        [DATE ADDED] $add\n";
-				$data[$i] = array( $ip, $port, $coun, $add );
-				$i++;
+				if(!empty($ips[$o])) {
+					$ip = $ips[$o];
+					$coun = $country[2][$o];
+					$add = $added[1][$o];
+					echo "[$i]\n        [Host] $ip\n        [COUNTRY] $coun\n        [DATE ADDED] $add\n";
+					$data[$i] = array( "ip"=>$ip, "country"=>$coun, "date"=>$add );
+					$i++;
+				}
 			}
 			
-			$json = json_encode($data);
+			$json = json_encode($data, JSON_PRETTY_PRINT);
 			if(isset($out)) write($out, $json);
 			if(stristr($page, '<p>Result limit reached.</p>')) $scan = false;
 			$p++;
 		}
-	} else die("Login status : FALSE\nProcess terminated.\n");
-	echo "=============== Grabbing Complete =============\n";
+		echo "Cleaning json..\n";
+		clean_json($out);
+	} else {
+		die("Login status : FALSE\nProcess terminated.\n");
+	}
+	echo "\n=============== Grabbing Complete =============\n";
 } else {
 	banner();
+}
+
+function clean_json($out) {
+	$file = file_get_contents($out);
+	$file = str_replace("\n][", ",", $file);
+	unlink($out);
+	write($out, $file);
 }
 
 function banner() {
